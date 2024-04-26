@@ -2,38 +2,31 @@ import java.util.*;
 
 public class App {
 
-  static class Student implements Comparable<Student> {
-
-    int rno;
-    int ht;
-    int wt;
-
-    Student(int rno, int ht, int wt) {
-      this.rno = rno;
-      this.ht = ht;
-      this.wt = wt;
-    }
-
-    public int compareTo(Student o) {
-      return this.rno - o.rno;
-    }
-
-    public String toString() {
-      return "ro = " + this.rno + ", ht = " + this.ht + ", wt = " + this.wt;
+  public static void selectionSort(int[] arr) {
+    int mi;
+    for (int i = 0; i < arr.length - 1; i++) {
+      mi = i;
+      for (int j = i + 1; j < arr.length; j++) {
+        if (isSmaller(arr, j, mi)) {
+          mi = j;
+        }
+      }
+      swap(arr, i, mi);
     }
   }
 
-  public static void main(String[] args) {
-    PriorityQueue<Student> qu = new PriorityQueue<>();
+  public static void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
 
-    qu.add(new Student(10, 180, 81));
-    qu.add(new Student(2, 185, 85));
-    qu.add(new Student(12, 170, 84));
-    qu.add(new Student(18, 179, 88));
-    qu.add(new Student(7, 182, 82));
-    while (qu.size() > 0) {
-      System.out.println(qu.peek());
-      qu.remove();
-    }
+  public static boolean isSmaller(int[] arr, int i, int j) {
+    if (arr[i] < arr[j]) return true; else return false;
+  }
+
+  public static void main(String[] args) {
+    int[] arr = { 5, 9, 8, 2, 1 };
+    selectionSort(arr);
   }
 }

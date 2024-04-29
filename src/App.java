@@ -3,45 +3,41 @@ import javax.lang.model.util.Elements;
 
 public class App {
 
-  public static int quickSelect(int[] arr, int lo, int hi, int k) {
-    int pivot = arr[hi];
-    int pi = partition(arr, pivot, lo, hi);
-    if (k > pi) {
-      return quickSelect(arr, pi + 1, hi, k);
-    } else if (k < pi) {
-      return quickSelect(arr, lo, pi - 1, k);
-    } else {
-      return arr[pi];
+  public static void countSort(int[] arr, int min, int max) {
+    int range = max - min + 1;
+    int[] freqArr = new int[range];
+    for (int val : arr) {
+      freqArr[val - min]++;
     }
+
+    for (int i = 1; i < freqArr.length; i++) {
+      freqArr[i] = freqArr[i] + freqArr[i - 1];
+    }
+    int[] ansArr = new int[arr.length];
+
+    for (int i = arr.length - 1; i >= 0; i--) {
+      ansArr[freqArr[arr[i] - min] - 1] = arr[i];
+      freqArr[arr[i] - min]--;
+    }
+
+    printArr(ansArr);
   }
 
-  public static int partition(int[] arr, int pivot, int lo, int hi) {
-    //The unknown is from i to end of array.
-    //Elements >pivot will be placed on j to i-1.
-    //Elements ≤pivot will be placed on 0 to j-1.
-    int i = lo, j = lo;
-    while (i <= hi) {
-      if (arr[i] <= pivot) {
-        swap(arr, i, j);
-        i++;
-        j++;
-      } else {
-        i++;
-      }
+  public static void printArr(int[] arr) {
+    for (int val : arr) {
+      System.out.print(val + " ");
     }
-    return (j - 1);
-  }
-
-  public static void swap(int[] arr, int i, int j) {
-    int temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    System.out.println();
   }
 
   public static void main(String[] args) {
-    int[] arr = { 8, 5, 1, 3, 7, 2, 9, 6 };
-    int k = 4;
-    int found = quickSelect(arr, 0, arr.length - 1, k - 1);
-    System.out.println(found - 1);
+    int[] arr = { 9, 6, 3, 5, 3, 4, 3, 9, 6, 4, 6, 5, 8, 9, 9 };
+    int max = Integer.MIN_VALUE;
+    int min = Integer.MAX_VALUE;
+    for (int val : arr) {
+      max = Math.max(val, max);
+      min = Math.min(val, min);
+    }
+    countSort(arr, min, max);
   }
 }

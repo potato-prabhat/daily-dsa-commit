@@ -3,14 +3,16 @@ import javax.lang.model.util.Elements;
 
 public class App {
 
-  public static void quickSort(int[] arr, int lo, int hi) {
-    if (lo > hi) {
-      return;
-    }
+  public static int quickSelect(int[] arr, int lo, int hi, int k) {
     int pivot = arr[hi];
     int pi = partition(arr, pivot, lo, hi);
-    quickSort(arr, lo, pi - 1);
-    quickSort(arr, pi + 1, hi);
+    if (k > pi) {
+      return quickSelect(arr, pi + 1, hi, k);
+    } else if (k < pi) {
+      return quickSelect(arr, lo, pi - 1, k);
+    } else {
+      return arr[pi];
+    }
   }
 
   public static int partition(int[] arr, int pivot, int lo, int hi) {
@@ -38,9 +40,8 @@ public class App {
 
   public static void main(String[] args) {
     int[] arr = { 8, 5, 1, 3, 7, 2, 9, 6 };
-    quickSort(arr, 0, arr.length - 1);
-    for (int val : arr) {
-      System.out.print(val + " ");
-    }
+    int k = 4;
+    int found = quickSelect(arr, 0, arr.length - 1, k - 1);
+    System.out.println(found - 1);
   }
 }

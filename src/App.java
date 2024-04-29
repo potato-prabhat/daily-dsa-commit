@@ -1,52 +1,46 @@
 import java.util.*;
+import javax.lang.model.util.Elements;
 
 public class App {
 
-  public static void main(String[] args) {
-    int[][] hc = {
-      { 1, 5, 7, 2, 1, 4 },
-      { 5, 8, 4, 3, 6, 1 },
-      { 3, 2, 9, 7, 2, 3 },
-      { 1, 2, 3, 9, 1, 7 },
-    };
-    int dp[][] = new int[hc.length][hc[0].length];
-    int min1 = Integer.MAX_VALUE;
-    int min2 = Integer.MAX_VALUE;
-    for (int j = 0; j < hc[0].length; j++) {
-      dp[0][j] = hc[0][j];
-      if (hc[0][j] <= min1) {
-        min2 = min1;
-        min1 = hc[0][j];
-      } else if (hc[0][j] <= min2) {
-        min2 = hc[0][j];
-      }
+  public static void quickSort(int[] arr, int lo, int hi) {
+    if (lo > hi) {
+      return;
     }
+    int pivot = arr[hi];
+    int pi = partition(arr, pivot, lo, hi);
+    quickSort(arr, lo, pi - 1);
+    quickSort(arr, pi + 1, hi);
+  }
 
-    for (int i = 1; i < hc.length; i++) { // i is house number
-      int tmin1 = Integer.MAX_VALUE;
-      int tmin2 = Integer.MAX_VALUE;
-      for (int j = 0; j < hc[0].length; j++) { // j is color number
-        if (hc[i - 1][j] == min1) {
-          dp[i][j] = hc[i][j] + min2;
-        } else {
-          dp[i][j] = hc[i][j] + min1;
-        }
-        if (dp[i][j] <= tmin1) {
-          tmin2 = tmin1;
-          tmin1 = dp[i][j];
-        } else if (dp[i][j] <= tmin2) {
-          tmin2 = dp[i][j];
-        }
-      }
-      min1 = tmin1;
-      min2 = tmin2;
-    }
-    int min = Integer.MAX_VALUE;
-    for (int k = 0; k < dp[0].length; k++) {
-      if (dp[dp.length - 1][k] < min) {
-        min = dp[dp.length - 1][k];
+  public static int partition(int[] arr, int pivot, int lo, int hi) {
+    //The unknown is from i to end of array.
+    //Elements >pivot will be placed on j to i-1.
+    //Elements ≤pivot will be placed on 0 to j-1.
+    int i = lo, j = lo;
+    while (i <= hi) {
+      if (arr[i] <= pivot) {
+        swap(arr, i, j);
+        i++;
+        j++;
+      } else {
+        i++;
       }
     }
-    System.out.println(min);
+    return (j - 1);
+  }
+
+  public static void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+
+  public static void main(String[] args) {
+    int[] arr = { 8, 5, 1, 3, 7, 2, 9, 6 };
+    quickSort(arr, 0, arr.length - 1);
+    for (int val : arr) {
+      System.out.print(val + " ");
+    }
   }
 }

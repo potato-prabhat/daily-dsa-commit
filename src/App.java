@@ -3,24 +3,27 @@ import javax.lang.model.util.Elements;
 
 public class App {
 
-  public static void countSort(int[] arr, int min, int max) {
-    int range = max - min + 1;
-    int[] freqArr = new int[range];
-    for (int val : arr) {
-      freqArr[val - min]++;
+  public static void sort01(int[] arr) {
+    int i = 0, j = 0, k = arr.length - 1;
+    while (i <= k) {
+      if (arr[i] == 0) {
+        swap(arr, i, j);
+        i++;
+        j++;
+      } else if (arr[i] == 1) {
+        i++;
+      } else {
+        swap(arr, i, k);
+        k--;
+      }
     }
+    printArr(arr);
+  }
 
-    for (int i = 1; i < freqArr.length; i++) {
-      freqArr[i] = freqArr[i] + freqArr[i - 1];
-    }
-    int[] ansArr = new int[arr.length];
-
-    for (int i = arr.length - 1; i >= 0; i--) {
-      ansArr[freqArr[arr[i] - min] - 1] = arr[i];
-      freqArr[arr[i] - min]--;
-    }
-
-    printArr(ansArr);
+  public static void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
   }
 
   public static void printArr(int[] arr) {
@@ -31,13 +34,7 @@ public class App {
   }
 
   public static void main(String[] args) {
-    int[] arr = { 9, 6, 3, 5, 3, 4, 3, 9, 6, 4, 6, 5, 8, 9, 9 };
-    int max = Integer.MIN_VALUE;
-    int min = Integer.MAX_VALUE;
-    for (int val : arr) {
-      max = Math.max(val, max);
-      min = Math.min(val, min);
-    }
-    countSort(arr, min, max);
+    int[] arr = { 1, 1, 2, 2, 0, 1, 2, 2, 1, 0, 1, 2, 0, 2, 1 };
+    sort01(arr);
   }
 }

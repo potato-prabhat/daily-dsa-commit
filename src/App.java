@@ -3,24 +3,28 @@ import javax.lang.model.util.Elements;
 
 public class App {
 
-  public static void targetSumPairPrint(int[] arr, int tar) {
-    Arrays.sort(arr);
-    int l = 0, r = arr.length - 1;
-    while (l < r) {
-      if (arr[l] + arr[r] > tar) {
-        r--;
-      } else if (arr[l] + arr[r] < tar) {
-        l++;
+  public static int findPivot(int[] arr) {
+    int lo = 0;
+    int hi = arr.length - 1;
+
+    while (lo < hi) {
+      int mid = (lo + hi) / 2;
+      if (arr[mid] < arr[hi]) {
+        hi = mid;
       } else {
-        System.out.println(arr[l] + " - " + arr[r]);
-        r--;
-        l++;
+        lo = mid + 1;
       }
     }
+
+    return arr[hi];
   }
 
   public static void main(String[] args) {
-    int[] arr = { 7, 15, 3, 18, 6, 4, 19, 2, 12, 11, 9 };
-    targetSumPairPrint(arr, 15);
+    int[] arr1 = { 50, 10, 20, 30, 40 };
+    int[] arr2 = { 30, 40, 50, 10, 20 };
+    int[] arr3 = { 40, 50, 10, 20, 30 };
+    System.out.println(findPivot(arr1));
+    System.out.println(findPivot(arr2));
+    System.out.println(findPivot(arr3));
   }
 }

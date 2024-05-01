@@ -3,28 +3,51 @@ import javax.lang.model.util.Elements;
 
 public class App {
 
-  public static int findPivot(int[] arr) {
-    int lo = 0;
-    int hi = arr.length - 1;
-
-    while (lo < hi) {
-      int mid = (lo + hi) / 2;
-      if (arr[mid] < arr[hi]) {
-        hi = mid;
-      } else {
-        lo = mid + 1;
+  public static void radixSort(int[] nums) {
+    int max = Integer.MIN_VALUE;
+    for (int val : nums) {
+      if (val > max) {
+        max = val;
       }
     }
 
-    return arr[hi];
+    int exp = 1;
+    while (exp <= max) {
+      countSort(nums, exp);
+      exp = exp * 10;
+    }
+    printnums(nums);
+  }
+
+  public static void countSort(int[] nums, int exp) {
+    int[] freqnums = new int[10];
+    int[] ansnums = new int[nums.length];
+
+    for (int i = 0; i < nums.length; i++) {
+      freqnums[nums[i] / exp % 10]++;
+    }
+    for (int i = 1; i < freqnums.length; i++) {
+      freqnums[i] = freqnums[i] + freqnums[i - 1];
+    }
+    for (int i = nums.length - 1; i >= 0; i--) {
+      ansnums[freqnums[(nums[i] / exp) % 10] - 1] = nums[i];
+      freqnums[(nums[i] / exp) % 10]--;
+    }
+    for (int i = 0; i < nums.length; i++) {
+      nums[i] = ansnums[i];
+    }
+  }
+
+  public static void printnums(int[] nums) {
+    for (int val : nums) {
+      System.out.print(val + " ");
+    }
+    System.out.println();
   }
 
   public static void main(String[] args) {
-    int[] arr1 = { 50, 10, 20, 30, 40 };
-    int[] arr2 = { 30, 40, 50, 10, 20 };
-    int[] arr3 = { 40, 50, 10, 20, 30 };
-    System.out.println(findPivot(arr1));
-    System.out.println(findPivot(arr2));
-    System.out.println(findPivot(arr3));
+    int[] nums = { 213, 97, 718, 123, 37, 443, 982, 64, 375, 683 };
+    // int[] nums = { 9, 6, 3, 5, 3, 4, 3, 9, 6, 4, 6, 5, 8, 9, 9 };
+    radixSort(nums);
   }
 }

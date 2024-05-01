@@ -3,38 +3,23 @@ import javax.lang.model.util.Elements;
 
 public class App {
 
-  public static void sort01(int[] arr) {
-    int i = 0, j = 0, k = arr.length - 1;
-    while (i <= k) {
-      if (arr[i] == 0) {
-        swap(arr, i, j);
-        i++;
-        j++;
-      } else if (arr[i] == 1) {
-        i++;
-      } else {
-        swap(arr, i, k);
-        k--;
-      }
-    }
-    printArr(arr);
-  }
-
-  public static void swap(int[] arr, int i, int j) {
-    int temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-  }
-
-  public static void printArr(int[] arr) {
-    for (int val : arr) {
-      System.out.print(val + " ");
-    }
-    System.out.println();
-  }
-
   public static void main(String[] args) {
-    int[] arr = { 1, 1, 2, 2, 0, 1, 2, 2, 1, 0, 1, 2, 0, 2, 1 };
-    sort01(arr);
+    int n = 5, k = 3;
+    int[] l2same = new int[n + 1];
+    int[] l2diff = new int[n + 1];
+    int[] tot = new int[n + 1];
+
+    l2same[2] = k;
+    l2diff[2] = k * (k - 1);
+    tot[2] = l2same[2] + l2diff[2];
+
+    for (int i = 3; i < tot.length; i++) {
+      l2same[i] = l2diff[i - 1];
+      l2diff[i] = tot[i - 1] * (k - 1);
+      tot[i] = l2same[i] + l2diff[i];
+    }
+
+    int ways = tot[n];
+    System.out.println(ways);
   }
 }

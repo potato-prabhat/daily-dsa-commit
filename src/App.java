@@ -4,20 +4,20 @@ import javax.lang.model.util.Elements;
 public class App {
 
   public static void main(String[] args) {
-    int n = 5;
-    int k = 4;
-    int[][] dp = new int[k + 1][n + 1];
-    for (int t = 1; t <= k; t++) {
-      for (int p = 1; p <= n; p++) {
-        if (p < t) {
-          dp[t][p] = 0;
-        } else if (t == p) {
-          dp[t][p] = 1;
-        } else {
-          dp[t][p] = dp[t - 1][p - 1] + dp[t][p - 1] * t;
-        }
+    int[] prices = { 11, 6, 7, 19, 4, 1, 6, 18, 4 };
+    int least = Integer.MAX_VALUE;
+    int mp = 0; //max profit
+    int pt = 0; //profit if sold today
+
+    for (int i = 0; i < prices.length; i++) {
+      if (prices[i] < least) {
+        least = prices[i];
+      }
+      pt = prices[i] - least;
+      if (pt > mp) {
+        mp = pt;
       }
     }
-    System.out.println(dp[k][n]);
+    System.out.println(mp);
   }
 }

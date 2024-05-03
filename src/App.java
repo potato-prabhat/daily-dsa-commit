@@ -4,32 +4,62 @@ import javax.lang.model.util.Elements;
 public class App {
 
   public static void main(String[] args) {
-    int[] arr = { 10, 15, 17, 20, 16, 18, 22, 20, 22, 20, 23, 25 };
-    int obsp = -arr[0];
-    int ossp = 0;
-    int ocsp = 0;
-
-    for (int i = 1; i < arr.length; i++) {
-      int nbsp = 0, nssp = 0, ncsp = 0;
-      if (ocsp - arr[i] > obsp) {
-        nbsp = ocsp - arr[i];
-      } else {
-        nbsp = obsp;
+    int[] prices = {
+      30,
+      40,
+      43,
+      50,
+      45,
+      20,
+      26,
+      40,
+      80,
+      50,
+      30,
+      15,
+      10,
+      20,
+      40,
+      45,
+      71,
+      50,
+      55,
+    };
+    int leastut = Integer.MAX_VALUE; //least upto today
+    int mpist = 0; // max profit if sold today
+    int[] dpmpisut = new int[prices.length]; // max profit if sold upto today
+    dpmpisut[0] = 0;
+    for (int i = 1; i < prices.length; i++) {
+      if (prices[i] < leastut) {
+        leastut = prices[i];
       }
-      if (obsp + arr[i] > ossp) {
-        nssp = obsp + arr[i];
+      mpist = prices[i] - leastut;
+      if (mpist > dpmpisut[i - 1]) {
+        dpmpisut[i] = mpist;
       } else {
-        nssp = ossp;
+        dpmpisut[i] = dpmpisut[i - 1];
       }
-      if (ossp > ocsp) {
-        ncsp = ossp;
-      } else {
-        ncsp = ocsp;
-      }
-      obsp = nbsp;
-      ossp = nssp;
-      ocsp = ncsp;
     }
-    System.out.println(ossp);
+    int maxat = prices[prices.length - 1]; //max at today
+    int mpibt = 0; // max profit if bought today
+    int[] dpmpibat = new int[prices.length]; // max profit if bought today or after today
+
+    for (int i = prices.length - 2; i >= 0; i--) {
+      if (prices[i] > maxat) {
+        maxat = prices[i];
+      }
+      mpibt = maxat - prices[i];
+      if (mpibt > dpmpibat[i + 1]) {
+        dpmpibat[i] = mpibt;
+      } else {
+        dpmpibat[i] = dpmpibat[i + 1];
+      }
+    }
+    int maxSum = Integer.MIN_VALUE;
+
+    for (int i = 0; i < dpmpibat.length; i++) {
+      maxSum = Math.max(maxSum, dpmpibat[i] + dpmpisut[i]);
+    }
+    System.out.println(maxSum);
   }
 }

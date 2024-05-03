@@ -4,20 +4,28 @@ import javax.lang.model.util.Elements;
 public class App {
 
   public static void main(String[] args) {
-    int[] prices = { 1, 2, 3, 4, 5 };
-    int buyd = 0;
-    int selld = 0;
-    int tp = 0;
+    int[] arr = { 10, 15, 17, 20, 16, 18, 22, 20, 22, 20, 23, 25 };
+    int fee = 3;
 
-    for (int i = 1; i < prices.length; i++) {
-      if (prices[i] >= prices[i - 1]) {
-        selld++;
+    int obsp = -arr[0];
+    int ossp = 0;
+    for (int i = 1; i < arr.length; i++) {
+      int nbsp = 0;
+      int nssp = 0;
+      if (ossp - arr[i] > obsp) {
+        nbsp = ossp - arr[i];
       } else {
-        tp += prices[selld] - prices[buyd];
-        buyd = selld = i;
+        nbsp = obsp;
       }
+
+      if (obsp + arr[i] - fee > ossp) {
+        nssp = obsp + arr[i] - fee;
+      } else {
+        nssp = ossp;
+      }
+      obsp = nbsp;
+      ossp = nssp;
     }
-    tp += prices[selld] - prices[buyd];
-    System.out.println(tp);
+    System.out.println(ossp);
   }
 }

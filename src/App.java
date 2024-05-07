@@ -1,21 +1,60 @@
+import java.util.ArrayList;
+
 public class App {
 
-  public static void main(String[] args) {
-    int[] prices = { 9, 6, 7, 6, 3, 8 };
-    int k = 3;
-    int[][] dp = new int[k + 1][prices.length];
+  static class Edge {
 
-    for (int t = 1; t <= k; t++) {
-      for (int d = 1; d < prices.length; d++) {
-        int max = dp[t][d - 1];
-        for (int pd = 0; pd < d; pd++) {
-          int ptilltm1 = dp[t - 1][pd];
-          int ptth = prices[d] - prices[pd];
-          max = Math.max(max, ptilltm1 + ptth);
+    int src;
+    int nbr;
+    int wt;
+
+    Edge(int src, int nbr, int wt) {
+      this.src = src;
+      this.nbr = nbr;
+      this.wt = wt;
+    }
+  }
+
+  public static void main(String[] args) {
+    int vtces = 7;
+    int[] v1 = { 0, 1, 2, 0, 3, 4, 5, 4 };
+    int[] v2 = { 1, 2, 3, 3, 4, 5, 6, 6 };
+    int[] wt = { 10, 10, 10, 10, 10, 10, 10, 10 };
+    ArrayList<Edge>[] graph = new ArrayList[vtces];
+    for (int i = 0; i < vtces; i++) {
+      graph[i] = new ArrayList<>();
+    }
+    int edges = 8;
+    for (int i = 0; i < edges; i++) {
+      graph[v1[i]].add(new Edge(v1[i], v2[i], wt[i]));
+      graph[v2[i]].add(new Edge(v2[i], v1[i], wt[i]));
+    }
+
+    int src = 0;
+    int dest = 6;
+    boolean[] visited = new boolean[vtces];
+    boolean path = hasPath(graph, src, dest, visited);
+    System.out.println(path);
+  }
+
+  public static boolean hasPath(
+    ArrayList<Edge>[] graph,
+    int src,
+    int dest,
+    boolean[] visited
+  ) {
+    if (src == dest) {
+      return true;
+    }
+    visited[src] = true;
+    for (Edge edge : graph[src]) {
+      if (visited[edge.nbr] == false) {
+        boolean hasNbrPath = hasPath(graph, edge.nbr, dest, visited);
+        if (hasNbrPath == true) {
+          return true;
         }
-        dp[t][d] = max;
       }
     }
-    System.out.println(dp[k][prices.length - 1]);
+    return false;
   }
 }

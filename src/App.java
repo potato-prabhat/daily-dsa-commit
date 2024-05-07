@@ -33,28 +33,26 @@ public class App {
     int src = 0;
     int dest = 6;
     boolean[] visited = new boolean[vtces];
-    boolean path = hasPath(graph, src, dest, visited);
-    System.out.println(path);
+    printAllPaths(graph, src, dest, visited, src + "");
   }
 
-  public static boolean hasPath(
+  public static void printAllPaths(
     ArrayList<Edge>[] graph,
     int src,
     int dest,
-    boolean[] visited
+    boolean[] visited,
+    String psf
   ) {
     if (src == dest) {
-      return true;
+      System.out.println(psf);
+      return;
     }
     visited[src] = true;
     for (Edge edge : graph[src]) {
       if (visited[edge.nbr] == false) {
-        boolean hasNbrPath = hasPath(graph, edge.nbr, dest, visited);
-        if (hasNbrPath == true) {
-          return true;
-        }
+        printAllPaths(graph, edge.nbr, dest, visited, psf + edge.nbr);
       }
     }
-    return false;
+    visited[src] = false;
   }
 }

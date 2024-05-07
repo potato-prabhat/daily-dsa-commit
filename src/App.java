@@ -40,6 +40,11 @@ public class App {
       }
     }
     System.out.println(comps);
+    if (comps.size() == 1) {
+      System.out.println(true);
+    } else {
+      System.out.println(false);
+    }
   }
 
   public static void drawTreeAndGenerateComp(

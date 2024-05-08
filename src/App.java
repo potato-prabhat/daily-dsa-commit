@@ -44,19 +44,39 @@ public class App {
     }
     int src = 0;
     boolean[] visited = new boolean[vtces];
-    ArrayDeque<Pair> queue = new ArrayDeque<>();
-    queue.add(new Pair(src, src + ""));
-    while (queue.size() > 0) {
-      //r m* w a*
-      Pair rem = queue.removeFirst();
-      if (visited[rem.v]) {
-        continue;
-      }
-      visited[rem.v] = true;
-      System.out.println(rem.v + "@" + rem.psf);
-      for (Edge e : graph[rem.v]) {
-        if (!visited[e.nbr]) queue.add(new Pair(e.nbr, rem.psf + e.nbr));
+    boolean isGraphCyclic = false;
+    for (int v = 0; v < vtces; v++) {
+      if (visited[v] == false) {
+        //traverse
+        isGraphCyclic = isCyclic(graph, src, visited);
+        if (isGraphCyclic) {
+          System.out.println(isGraphCyclic);
+          return;
+        }
       }
     }
+    System.out.println(isGraphCyclic);
+  }
+
+  public static boolean isCyclic(
+    ArrayList<Edge>[] graph,
+    int src,
+    boolean[] visited
+  ) {
+    ArrayDeque<Pair> q = new ArrayDeque<>();
+    q.add(new Pair(src, src + ""));
+    while (q.size() > 0) {
+      Pair rem = q.removeFirst();
+      if (visited[rem.v]) {
+        return true;
+      }
+      visited[rem.v] = true;
+      for (Edge e : graph[rem.v]) {
+        if (!visited[e.nbr]) {
+          q.add(new Pair(e.nbr, rem.psf + e.nbr));
+        }
+      }
+    }
+    return false;
   }
 }

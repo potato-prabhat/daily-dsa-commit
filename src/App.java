@@ -1,3 +1,4 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -16,6 +17,17 @@ public class App {
     }
   }
 
+  static class Pair {
+
+    int v;
+    String psf;
+
+    Pair(int v, String psf) {
+      this.v = v;
+      this.psf = psf;
+    }
+  }
+
   public static void main(String[] args) {
     int vtces = 7;
     int[] v1 = { 0, 1, 2, 0, 3, 4, 5, 4 };
@@ -30,43 +42,21 @@ public class App {
       graph[v1[i]].add(new Edge(v1[i], v2[i], wt[i]));
       graph[v2[i]].add(new Edge(v2[i], v1[i], wt[i]));
     }
-
     int src = 0;
-
-    HashSet<Integer> visited = new HashSet<>();
-    int osrc = src;
-    hamiltonian(graph, src, visited, src + "", osrc);
-  }
-
-  public static void hamiltonian(
-    ArrayList<Edge>[] graph,
-    int src,
-    HashSet<Integer> visited,
-    String psf,
-    int osrc
-  ) {
-    if (visited.size() == graph.length - 1) {
-      System.out.print(psf);
-      boolean closingEdgeFound = false;
-      for (Edge e : graph[src]) {
-        if (e.nbr == osrc) {
-          closingEdgeFound = true;
-          break;
-        }
+    boolean[] visited = new boolean[vtces];
+    ArrayDeque<Pair> queue = new ArrayDeque<>();
+    queue.add(new Pair(src, src + ""));
+    while (queue.size() > 0) {
+      //r m* w a*
+      Pair rem = queue.removeFirst();
+      if (visited[rem.v]) {
+        continue;
       }
-      if (closingEdgeFound) {
-        System.out.println("*");
-      } else {
-        System.out.println(".");
-      }
-      return;
-    }
-    visited.add(src);
-    for (Edge e : graph[src]) {
-      if (visited.contains(e.nbr) == false) {
-        hamiltonian(graph, e.nbr, visited, psf + e.nbr, osrc);
+      visited[rem.v] = true;
+      System.out.println(rem.v + "@" + rem.psf);
+      for (Edge e : graph[rem.v]) {
+        if (!visited[e.nbr]) queue.add(new Pair(e.nbr, rem.psf + e.nbr));
       }
     }
-    visited.remove(src);
   }
 }

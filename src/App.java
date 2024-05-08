@@ -1,5 +1,6 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class App {
@@ -21,10 +22,12 @@ public class App {
 
     int v;
     String psf;
+    int level;
 
-    Pair(int v, String psf) {
+    Pair(int v, String psf, int level) {
       this.v = v;
       this.psf = psf;
+      this.level = level;
     }
   }
 
@@ -43,40 +46,47 @@ public class App {
       graph[v2[i]].add(new Edge(v2[i], v1[i], wt[i]));
     }
     int src = 0;
-    boolean[] visited = new boolean[vtces];
-    boolean isGraphCyclic = false;
+    int[] visited = new int[vtces];
+    Arrays.fill(visited, -1);
+
     for (int v = 0; v < vtces; v++) {
-      if (visited[v] == false) {
-        //traverse
-        isGraphCyclic = isCyclic(graph, src, visited);
-        if (isGraphCyclic) {
-          System.out.println(isGraphCyclic);
+      //traverse
+      if (visited[v] == -1) {
+        boolean isCompBipartite = checkComponentBipartite(graph, v, visited);
+        if (!isCompBipartite) {
+          System.out.println(false);
           return;
         }
       }
     }
-    System.out.println(isGraphCyclic);
+    System.out.println(true);
   }
 
-  public static boolean isCyclic(
+  public static boolean checkComponentBipartite(
     ArrayList<Edge>[] graph,
     int src,
-    boolean[] visited
+    int[] visited
   ) {
     ArrayDeque<Pair> q = new ArrayDeque<>();
-    q.add(new Pair(src, src + ""));
+    q.add(new Pair(src, src + "", 0));
     while (q.size() > 0) {
       Pair rem = q.removeFirst();
-      if (visited[rem.v]) {
-        return true;
+
+      if (visited[rem.v] != -1) {
+        //some work
+        if (rem.level != visited[rem.level]) {
+          return false;
+        }
+      } else {
+        visited[rem.v] = rem.level;
       }
-      visited[rem.v] = true;
+
       for (Edge e : graph[rem.v]) {
-        if (!visited[e.nbr]) {
-          q.add(new Pair(e.nbr, rem.psf + e.nbr));
+        if (visited[e.nbr] == -1) {
+          q.add(new Pair(e.nbr, rem.psf + e.nbr, rem.level + 1));
         }
       }
     }
-    return false;
+    return true;
   }
 }

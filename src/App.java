@@ -21,13 +21,11 @@ public class App {
   static class Pair {
 
     int v;
-    String psf;
-    int level;
+    int time;
 
-    Pair(int v, String psf, int level) {
+    Pair(int v, int time) {
       this.v = v;
-      this.psf = psf;
-      this.level = level;
+      this.time = time;
     }
   }
 
@@ -45,48 +43,28 @@ public class App {
       graph[v1[i]].add(new Edge(v1[i], v2[i], wt[i]));
       graph[v2[i]].add(new Edge(v2[i], v1[i], wt[i]));
     }
-    int src = 0;
+    int src = 6;
+    int t = 3;
     int[] visited = new int[vtces];
-    Arrays.fill(visited, -1);
 
-    for (int v = 0; v < vtces; v++) {
-      //traverse
-      if (visited[v] == -1) {
-        boolean isCompBipartite = checkComponentBipartite(graph, v, visited);
-        if (!isCompBipartite) {
-          System.out.println(false);
-          return;
-        }
-      }
-    }
-    System.out.println(true);
-  }
-
-  public static boolean checkComponentBipartite(
-    ArrayList<Edge>[] graph,
-    int src,
-    int[] visited
-  ) {
     ArrayDeque<Pair> q = new ArrayDeque<>();
-    q.add(new Pair(src, src + "", 0));
+    q.add(new Pair(src, 1));
+    int count = 0;
+
     while (q.size() > 0) {
       Pair rem = q.removeFirst();
-
-      if (visited[rem.v] != -1) {
-        //some work
-        if (rem.level != visited[rem.level]) {
-          return false;
-        }
-      } else {
-        visited[rem.v] = rem.level;
+      if (visited[rem.v] > 0) {
+        continue;
       }
-
+      visited[rem.v] = rem.time;
+      if (rem.time > t) break;
+      count++;
       for (Edge e : graph[rem.v]) {
-        if (visited[e.nbr] == -1) {
-          q.add(new Pair(e.nbr, rem.psf + e.nbr, rem.level + 1));
+        if (visited[e.nbr] == 0) {
+          q.add(new Pair(e.nbr, rem.time + 1));
         }
       }
     }
-    return true;
+    System.out.println(count);
   }
 }

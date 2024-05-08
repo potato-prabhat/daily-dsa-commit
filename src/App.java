@@ -43,7 +43,7 @@ public class App {
       graph[v1[i]].add(new Edge(v1[i], v2[i], wt[i]));
       graph[v2[i]].add(new Edge(v2[i], v1[i], wt[i]));
     }
-    int src = 6;
+    int src = 5;
     int t = 3;
     int[] visited = new int[vtces];
 

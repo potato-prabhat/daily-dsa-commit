@@ -2,6 +2,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.PriorityQueue;
 
 public class App {
 
@@ -18,14 +19,20 @@ public class App {
     }
   }
 
-  static class Pair {
+  public static class Pair implements Comparable<Pair> {
 
     int v;
-    int time;
+    String psf;
+    int wsf;
 
-    Pair(int v, int time) {
+    Pair(int v, String psf, int wsf) {
       this.v = v;
-      this.time = time;
+      this.psf = psf;
+      this.wsf = wsf;
+    }
+
+    public int compareTo(Pair o) {
+      return this.wsf - o.wsf;
     }
   }
 
@@ -43,28 +50,24 @@ public class App {
       graph[v1[i]].add(new Edge(v1[i], v2[i], wt[i]));
       graph[v2[i]].add(new Edge(v2[i], v1[i], wt[i]));
     }
-    int src = 5;
-    int t = 3;
-    int[] visited = new int[vtces];
 
-    ArrayDeque<Pair> q = new ArrayDeque<>();
-    q.add(new Pair(src, 1));
-    int count = 0;
+    boolean[] visited = new boolean[vtces];
+    int src = 0;
+    PriorityQueue<Pair> pq = new PriorityQueue<>();
+    pq.add(new Pair(src, src + "", 0));
 
-    while (q.size() > 0) {
-      Pair rem = q.removeFirst();
-      if (visited[rem.v] > 0) {
+    while (pq.size() > 0) {
+      Pair rem = pq.remove();
+      if (visited[rem.v] == true) {
         continue;
       }
-      visited[rem.v] = rem.time;
-      if (rem.time > t) break;
-      count++;
+      visited[rem.v] = true;
+      System.out.println(rem.v + " via " + rem.psf + "@" + rem.wsf);
       for (Edge e : graph[rem.v]) {
-        if (visited[e.nbr] == 0) {
-          q.add(new Pair(e.nbr, rem.time + 1));
+        if (visited[e.nbr] == false) {
+          pq.add(new Pair(e.nbr, rem.psf + e.nbr, e.wt + rem.wsf));
         }
       }
     }
-    System.out.println(count);
   }
 }

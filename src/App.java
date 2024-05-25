@@ -22,17 +22,17 @@ public class App {
   public static class Pair implements Comparable<Pair> {
 
     int v;
-    String psf;
-    int wsf;
+    int av;
+    int w;
 
-    Pair(int v, String psf, int wsf) {
+    Pair(int v, int av, int w) {
       this.v = v;
-      this.psf = psf;
-      this.wsf = wsf;
+      this.av = av;
+      this.w = w;
     }
 
     public int compareTo(Pair o) {
-      return this.wsf - o.wsf;
+      return this.w - o.w;
     }
   }
 
@@ -54,7 +54,7 @@ public class App {
     boolean[] visited = new boolean[vtces];
     int src = 0;
     PriorityQueue<Pair> pq = new PriorityQueue<>();
-    pq.add(new Pair(src, src + "", 0));
+    pq.add(new Pair(src, -1, 0));
 
     while (pq.size() > 0) {
       Pair rem = pq.remove();
@@ -62,10 +62,13 @@ public class App {
         continue;
       }
       visited[rem.v] = true;
-      System.out.println(rem.v + " via " + rem.psf + "@" + rem.wsf);
+      if (rem.av != -1) {
+        System.out.println(rem.v + " via " + rem.av + "@" + rem.w);
+      }
+
       for (Edge e : graph[rem.v]) {
         if (visited[e.nbr] == false) {
-          pq.add(new Pair(e.nbr, rem.psf + e.nbr, e.wt + rem.wsf));
+          pq.add(new Pair(e.nbr, rem.v, e.wt));
         }
       }
     }
